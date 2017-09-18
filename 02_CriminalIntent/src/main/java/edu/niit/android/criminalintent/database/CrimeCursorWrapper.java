@@ -1,4 +1,4 @@
-package edu.niit.android.criminalintent;
+package edu.niit.android.criminalintent.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -6,7 +6,8 @@ import android.database.CursorWrapper;
 import java.util.Date;
 import java.util.UUID;
 
-import edu.niit.android.criminalintent.CrimeDbSchema.CrimeTable;
+import edu.niit.android.criminalintent.Crime;
+import edu.niit.android.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 /**
  * Created by zhayh on 2017-9-7.

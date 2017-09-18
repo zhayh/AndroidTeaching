@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -34,8 +35,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import edu.niit.android.criminalintent.R;
-
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "dialog_date";
@@ -44,6 +43,8 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_CAMERA = 1003;
 
     private Crime mCrime;
+    private File mPhotoFile;
+
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
@@ -53,12 +54,6 @@ public class CrimeFragment extends Fragment {
 
     private ImageView mPhotoView;
     private ImageButton mPhotoButton;
-
-    private File mPhotoFile;
-
-    public CrimeFragment() {
-        // Required empty public constructor
-    }
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -166,9 +161,7 @@ public class CrimeFragment extends Fragment {
         }
 
         // 拍照
-        mPhotoView = (ImageView) view.findViewById(R.id.crime_photo);
         mPhotoButton = (ImageButton) view.findViewById(R.id.crime_camera);
-
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(manager) != null;
         mPhotoButton.setEnabled(canTakePhoto);
@@ -190,6 +183,9 @@ public class CrimeFragment extends Fragment {
                 startActivityForResult(captureImage, REQUEST_CAMERA);
             }
         });
+        mPhotoView = (ImageView) view.findViewById(R.id.crime_photo);
+        updatePhotoView();
+
         return view;
     }
 
@@ -220,6 +216,12 @@ public class CrimeFragment extends Fragment {
             } finally {
                 cursor.close();
             }
+        } else if(requestCode == REQUEST_CAMERA) {
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "edu.niit.android.criminalintent.fileprovider", mPhotoFile);
+
+            getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updatePhotoView();
         }
     }
 
@@ -271,5 +273,14 @@ public class CrimeFragment extends Fragment {
         }
 
         return getString(R.string.crime_report, mCrime.getTitle(), dateStr, solvedStr, suspect);
+    }
+
+    private void updatePhotoView() {
+        if(mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 }

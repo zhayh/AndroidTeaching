@@ -1,10 +1,10 @@
-package edu.niit.android.criminalintent;
+package edu.niit.android.criminalintent.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import edu.niit.android.criminalintent.CrimeDbSchema.CrimeTable;
+import edu.niit.android.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 /**
  * Created by zhayh on 2017-9-7.

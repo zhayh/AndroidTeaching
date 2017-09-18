@@ -4,14 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.FragmentActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import edu.niit.android.criminalintent.CrimeDbSchema.CrimeTable;
+import edu.niit.android.criminalintent.database.CrimeDbSchema.CrimeTable;
+import edu.niit.android.criminalintent.database.CrimeBaseHelper;
+import edu.niit.android.criminalintent.database.CrimeCursorWrapper;
 
 /**
  * Created by zhayh on 2017-9-1.

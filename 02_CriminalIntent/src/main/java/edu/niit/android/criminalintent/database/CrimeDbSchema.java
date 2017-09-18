@@ -1,4 +1,4 @@
-package edu.niit.android.criminalintent;
+package edu.niit.android.criminalintent.database;
 
 /**
  * Created by zhayh on 2017-9-7.
