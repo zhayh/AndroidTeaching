@@ -2,6 +2,7 @@ package edu.niit.android.criminalintent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +56,15 @@ public class DatePickerFragment extends DialogFragment {
                     }
                 })
                 .create();
+//        return new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+//                Date date = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
+//                sendResult(Activity.RESULT_OK, date);
+//            }
+//        }, mDatePicker.getYear(), mDatePicker.getMonth(), mDatePicker.getDayOfMonth());
+
+        // getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);可以去掉标题栏
     }
 
     public static DatePickerFragment newInstance(Date date) {

@@ -1,4 +1,4 @@
-package edu.niit.android.criminalintent;
+package edu.niit.android.criminalintent.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import edu.niit.android.criminalintent.Crime;
+import edu.niit.android.criminalintent.dao.DaoSession;
 import edu.niit.android.criminalintent.database.CrimeDbSchema.CrimeTable;
-import edu.niit.android.criminalintent.database.CrimeBaseHelper;
-import edu.niit.android.criminalintent.database.CrimeCursorWrapper;
 
 /**
  * Created by zhayh on 2017-9-1.
@@ -24,6 +24,8 @@ public class CrimeLab {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
+
+    private DaoSession mDaoSession;
 
     public static CrimeLab getInstance(Context context) {
         if(sCrimeLab == null) {
@@ -44,6 +46,7 @@ public class CrimeLab {
         // 打开数据库
         mContext = context.getApplicationContext();
         mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
+
     }
 
     public List<Crime> getCrimes() {
@@ -53,10 +56,10 @@ public class CrimeLab {
 
         CrimeCursorWrapper cursor = queryCrimes(null, null);
         try {
-            cursor.moveToFirst();
-            while(!cursor.isAfterLast()) {
+//            cursor.moveToFirst();
+            while(cursor.moveToNext()) {
                 crimes.add(cursor.getCrime());
-                cursor.moveToNext();
+//                cursor.moveToNext();
             }
         } finally {
             cursor.close();

@@ -36,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import edu.niit.android.criminalintent.database.CrimeLab;
+
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "dialog_date";
@@ -270,12 +272,11 @@ public class CrimeFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
         CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(String.format("%tF", mCrime.getDate()));
     }
 
     private String getCrimeReport() {

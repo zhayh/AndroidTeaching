@@ -1,8 +1,6 @@
 package edu.niit.android.criminalintent;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,7 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.UUID;
+
+import edu.niit.android.criminalintent.database.CrimeLab;
 
 /**
  * Created by zhayh on 2017-9-1.
