@@ -1,6 +1,7 @@
 package edu.niit.android.photogallery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -45,6 +46,9 @@ public class PhotoGalleyFragment extends Fragment {
 //        new FetchItemsTask().execute();
 
         updateItems();
+
+        Intent intent = PollService.newIntent(getActivity());
+        getActivity().startService(intent);
 
         Handler responseHandler = new Handler();
         mThumbDownloader = new ThumbDownloader<>(responseHandler);
