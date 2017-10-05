@@ -1,5 +1,6 @@
 package edu.niit.android.photogallery;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
@@ -26,6 +27,12 @@ public class PollService extends IntentService {
     private static final String TAG = "PollService";
 //    private static final int POLL_INTERVAL = 1000 * 60; // 60秒
     private static final long POLL_INTERVAL = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+    public static final String ACTION_SHOW_NOTIFICATION =
+            "edu.niit.android.photogallery.SHOW_NOTIFICATION";
+    public static final String PERM_PRIVATE = "edu.niit.android.photogallery.PRIVATE";
+
+    public static final String REQUEST_CODE = "REQUEST_CODE";
+    public static final String NOTIFICATION = "NOTIFICATION";
 
     public static Intent newIntent(Context context) {
         return new Intent(context, PollService.class);
@@ -76,8 +83,18 @@ public class PollService extends IntentService {
 
             NotificationManagerCompat manager = NotificationManagerCompat.from(this);
             manager.notify(0, notification);
+
+//            sendBroadcast(new Intent(ACTION_SHOW_NOTIFICATION), PERM_PRIVATE);
+            showBackgroundNotification(0, notification);
         }
         QueryPreferences.setLastResultId(this, resultId);
+    }
+
+    private void showBackgroundNotification(int requestCode, Notification notification) {
+        Intent intent = new Intent(ACTION_SHOW_NOTIFICATION);
+        intent.putExtra(REQUEST_CODE, requestCode);
+        intent.putExtra(NOTIFICATION, notification);
+        sendOrderedBroadcast(intent, PERM_PRIVATE, null, null, Activity.RESULT_OK, null, null);
     }
 
     public static void setServiceAlarm(Context context, boolean isOn) {
@@ -92,6 +109,7 @@ public class PollService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+        QueryPreferences.setAlarmOn(context, isOn);
     }
 
     public static boolean isServiceAlarmOn(Context context) {

@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoGalleyFragment extends Fragment {
+public class PhotoGalleyFragment extends VisibleFragment {
     private static final String TAG = "PhothGalleyFragment";
 
     private RecyclerView mPhotoView;
