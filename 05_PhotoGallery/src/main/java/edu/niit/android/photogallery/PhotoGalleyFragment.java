@@ -184,11 +184,22 @@ public class PhotoGalleyFragment extends VisibleFragment {
     private class PhotoHolder extends RecyclerView.ViewHolder {
 //        private TextView mTitleTextView;
         private ImageView mTitleImageView;
+        private GalleryItem mGalleryItem;
 
         public PhotoHolder(View itemView) {
             super(itemView);
 //            mTitleTextView = (TextView) itemView;
             mTitleImageView = (ImageView) itemView.findViewById(R.id.fragment_photo_image_view);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 使用隐式Intent
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, mGalleryItem.getPhotoPageUri());
+                    Intent intent = PhotoPageActivity.newIntent(getActivity(), mGalleryItem
+                            .getPhotoPageUri());
+                    startActivity(intent);
+                }
+            });
         }
 
 //        public void bindGalleryItem(GalleryItem item) {
@@ -196,6 +207,10 @@ public class PhotoGalleyFragment extends VisibleFragment {
 //        }
         public void bindGalleryDrawable(Drawable drawable) {
             mTitleImageView.setImageDrawable(drawable);
+        }
+
+        public void bindGalleryItem(GalleryItem galleryItem) {
+            mGalleryItem = galleryItem;
         }
     }
 
@@ -219,6 +234,7 @@ public class PhotoGalleyFragment extends VisibleFragment {
         public void onBindViewHolder(PhotoHolder holder, int position) {
             GalleryItem item = mGalleryItems.get(position);
 //            holder.bindGalleryItem(item);
+            holder.bindGalleryItem(item);
             Drawable placeholder = getResources().getDrawable(R.mipmap.ic_launcher);
             holder.bindGalleryDrawable(placeholder);
             mThumbDownloader.queueThumb(holder, item.getUrl_s());
