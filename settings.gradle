@@ -1,1 +1,1 @@
-include ':01_GeoQuiz', ':02_CriminalIntent'
+include ':01_GeoQuiz', ':02_CriminalIntent', ':03_BeatBox', ':05_PhotoGallery'

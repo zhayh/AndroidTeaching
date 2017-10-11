@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 import edu.niit.android.criminalintent.Crime;
-import edu.niit.android.criminalintent.dao.DaoSession;
 import edu.niit.android.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 /**
@@ -24,8 +23,6 @@ public class CrimeLab {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
-
-    private DaoSession mDaoSession;
 
     public static CrimeLab getInstance(Context context) {
         if(sCrimeLab == null) {
