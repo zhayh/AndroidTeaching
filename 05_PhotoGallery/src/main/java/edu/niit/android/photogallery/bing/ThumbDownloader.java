@@ -1,4 +1,4 @@
-package edu.niit.android.photogallery;
+package edu.niit.android.photogallery.bing;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import edu.niit.android.photogallery.bing.ShowApiFetch;
+import edu.niit.android.photogallery.FlickrFetch;
 
 /**
  * Created by zhayh on 2017-10-2.
@@ -84,7 +84,7 @@ public class ThumbDownloader<T> extends HandlerThread {
                 return;
             }
 
-            byte[] bitmapBytes = new FlickrFetch().getUrlBytes(url);
+            byte[] bitmapBytes = new ShowApiFetch().getUrlBytes(url);
             final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
             Log.i(TAG, "Bitmap created");
 

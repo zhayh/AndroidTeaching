@@ -1,4 +1,4 @@
-package edu.niit.android.photogallery;
+package edu.niit.android.photogallery.bing;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,11 +23,17 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.niit.android.photogallery.PhotoPageActivity;
+import edu.niit.android.photogallery.PollService;
+import edu.niit.android.photogallery.QueryPreferences;
+import edu.niit.android.photogallery.R;
+import edu.niit.android.photogallery.VisibleFragment;
+
 public class PhotoGalleyFragment extends VisibleFragment {
     private static final String TAG = "PhothGalleyFragment";
 
     private RecyclerView mPhotoView;
-    private List<GalleryItem> mItems = new ArrayList<>();
+    private List<PhotoItem> mItems = new ArrayList<>();
 
     private ThumbDownloader<PhotoHolder> mThumbDownloader;
 
@@ -147,7 +153,7 @@ public class PhotoGalleyFragment extends VisibleFragment {
         }
     }
 
-    private class FetchItemsTask extends AsyncTask<Void, Void, List<GalleryItem>> {
+    private class FetchItemsTask extends AsyncTask<Void, Void, List<PhotoItem>> {
         private String mQuery;
 
         public FetchItemsTask(String query) {
@@ -155,7 +161,7 @@ public class PhotoGalleyFragment extends VisibleFragment {
         }
 
         @Override
-        protected List<GalleryItem> doInBackground(Void... voids) {
+        protected List<PhotoItem> doInBackground(Void... voids) {
 //            try {
 //                String result = new FlickrFetchr().getUrlString("https://www.bignerdranch.com");
 //                Log.i(TAG, "Fetched contents of URL: " + result);
@@ -165,14 +171,14 @@ public class PhotoGalleyFragment extends VisibleFragment {
 //            }
 //            String query = "robot";
             if(mQuery == null) {
-                return new FlickrFetch().fetchRecentPhotots();
+                return new ShowApiFetch().fetchRecentPhotots();
             } else {
-                return new FlickrFetch().searchPhotos(mQuery);
+                return new ShowApiFetch().searchPhotos(mQuery);
             }
         }
 
         @Override
-        protected void onPostExecute(List<GalleryItem> galleryItems) {
+        protected void onPostExecute(List<PhotoItem> galleryItems) {
             mItems = galleryItems;
             setupAdapter();
         }
@@ -181,7 +187,7 @@ public class PhotoGalleyFragment extends VisibleFragment {
     private class PhotoHolder extends RecyclerView.ViewHolder {
 //        private TextView mTitleTextView;
         private ImageView mTitleImageView;
-        private GalleryItem mGalleryItem;
+        private PhotoItem mGalleryItem;
 
         public PhotoHolder(View itemView) {
             super(itemView);
@@ -206,15 +212,15 @@ public class PhotoGalleyFragment extends VisibleFragment {
             mTitleImageView.setImageDrawable(drawable);
         }
 
-        public void bindGalleryItem(GalleryItem galleryItem) {
+        public void bindGalleryItem(PhotoItem galleryItem) {
             mGalleryItem = galleryItem;
         }
     }
 
     private class PhotoAdapter extends RecyclerView.Adapter<PhotoHolder> {
-        private List<GalleryItem> mGalleryItems;
+        private List<PhotoItem> mGalleryItems;
 
-        public PhotoAdapter(List<GalleryItem> galleryItems) {
+        public PhotoAdapter(List<PhotoItem> galleryItems) {
             this.mGalleryItems = galleryItems;
         }
 
@@ -229,12 +235,12 @@ public class PhotoGalleyFragment extends VisibleFragment {
 
         @Override
         public void onBindViewHolder(PhotoHolder holder, int position) {
-            GalleryItem item = mGalleryItems.get(position);
+            PhotoItem item = mGalleryItems.get(position);
 //            holder.bindGalleryItem(item);
             holder.bindGalleryItem(item);
             Drawable placeholder = getResources().getDrawable(R.mipmap.ic_launcher);
             holder.bindGalleryDrawable(placeholder);
-            mThumbDownloader.queueThumb(holder, item.getUrl_s());
+            mThumbDownloader.queueThumb(holder, item.getPic());
         }
 
         @Override

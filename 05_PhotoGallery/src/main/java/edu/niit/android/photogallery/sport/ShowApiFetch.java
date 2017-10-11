@@ -1,4 +1,4 @@
-package edu.niit.android.photogallery;
+package edu.niit.android.photogallery.sport;
 
 import android.net.Uri;
 import android.util.Log;
@@ -14,37 +14,39 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import edu.niit.android.photogallery.GalleryItem;
+import edu.niit.android.photogallery.GalleryItems;
+
 /**
  * Created by zhayh on 2017-10-1.
  */
 
-public class FlickrFetchr {
-    private static final String TAG = "FlickrFetchr";
-    private static final String API_KEY = "b1d2bfb0af38d54a2f93bf56f55ff5d6";
-    private static final String FETCH_RECENTS_METHOD = "flickr.photos.getRecent";
-    private static final String SEARCH_METHOD = "flickr.photos.search";
+public class ShowApiFetch {
+    private static final String TAG = "ShowApiFetch";
+    private static final String API_ID  = "47511";
+    private static final String API_KEY  = "1fc7af0d963a486d93a6eb1b93afcd75";
+    private static final String FETCH_RECENTS_METHOD = "";
+    private static final String SEARCH_METHOD = "";
 
-    private static final Uri ENDPOINT = Uri.parse("https://api.flickr.com/services/rest/")
+    private static final Uri ENDPOINT = Uri.parse("http://route.showapi.com/196-1")
             .buildUpon()
-            .appendQueryParameter("method", "flickr.photos.getRecent")
-            .appendQueryParameter("api_key", API_KEY)
-            .appendQueryParameter("format", "json")
-            .appendQueryParameter("nojsoncallback", "1")
-            .appendQueryParameter("extras", "url_s")
+            .appendQueryParameter("showapi_appid", API_ID)
+            .appendQueryParameter("showapi_sign", API_KEY)
+            .appendQueryParameter("num", "100")
             .build();
 
-    private List<GalleryItem> items = new ArrayList<>();
+    private List<SportItem> items = new ArrayList<>();
 
     public byte[] getUrlBytes(String urlSpect) throws IOException {
         URL url = new URL(urlSpect);
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -70,17 +72,17 @@ public class FlickrFetchr {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<GalleryItem> fetchRecentPhotots() {
+    public List<SportItem> fetchRecentPhotots() {
         String url = buildUrl(FETCH_RECENTS_METHOD, null);
-        return downloadGalleryItems(url);
+        return downloadPhotoItems(url);
     }
 
-    public List<GalleryItem> searchPhotos(String query) {
+    public List<SportItem> searchPhotos(String query) {
         String url = buildUrl(SEARCH_METHOD, query);
-        return downloadGalleryItems(url);
+        return downloadPhotoItems(url);
     }
 
-    private List<GalleryItem> downloadGalleryItems(String url) {
+    private List<SportItem> downloadPhotoItems(String url) {
         try {
             String jsonStr = getUrlString(url);
             Log.i(TAG, "Received JSON: " + jsonStr);
@@ -107,21 +109,21 @@ public class FlickrFetchr {
         return builder.build().toString();
     }
 
-    private void parseItems(List<GalleryItem> items, JSONObject json) throws JSONException {
-        JSONObject photosJson = json.getJSONObject("photos");
-        JSONArray photosArray = photosJson.getJSONArray("photo");
+    private void parseItems(List<SportItem> items, JSONObject json) throws JSONException {
+        JSONObject photosJson = json.getJSONObject("showapi_res_body");
+        JSONArray photosArray = photosJson.getJSONArray("newslist");
 
         for(int i = 0; i < photosArray.length(); i++) {
             JSONObject photoJson = photosArray.getJSONObject(i);
 
-            GalleryItem item =new GalleryItem();
-            item.setId(photoJson.getString("id"));
+            SportItem item =new SportItem();
             item.setTitle(photoJson.getString("title"));
-            if(!photoJson.has("url_s")) {
+            if(!photoJson.has("picUrl")) {
                 continue;
             }
-            item.setUrl_s(photoJson.getString("url_s"));
-            item.setOwner(photoJson.getString("owner"));
+            item.setPicUrl(photoJson.getString("picUrl"));
+            item.setDescription(photoJson.getString("description"));
+            item.setCtime(photoJson.getString("ctime"));
             items.add(item);
         }
 
