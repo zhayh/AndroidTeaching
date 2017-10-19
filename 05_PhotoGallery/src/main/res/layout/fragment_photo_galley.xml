@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/photo_recycler_view"
-    tools:context="edu.niit.android.photogallery.PhotoGalleyFragment">
+    android:id="@+id/photo_recycler_view">
 
 
 </android.support.v7.widget.RecyclerView>
